@@ -1,4 +1,6 @@
 from django.db import models
+from django.core.exceptions import ValidationError
+from django.utils import timezone
 
 
 class Status(models.Model):
@@ -62,7 +64,7 @@ class SubCategory(models.Model):
 class Transaction(models.Model):
     """Модель для хранений движения денежных средств."""
 
-    created_at = models.DateField(auto_now_add=True, verbose_name="Дата создания")
+    created_at = models.DateField(verbose_name="Дата создания")
 
     status = models.ForeignKey(
         Status, on_delete=models.DO_NOTHING, verbose_name="Статус"
@@ -84,6 +86,24 @@ class Transaction(models.Model):
 
     def __str__(self):
         return f"{self.status}/{self.created_at} - {self.amount} руб."
+
+    def clean(self):
+        super().clean()
+
+        if self.subcategory.category != self.category:
+            raise ValidationError(
+                {"subcategory": "Подкатегория не связана с выбранной категорией."}
+            )
+
+        if self.category.type != self.type:
+            raise ValidationError(
+                {"category": "Категория не соответствует выбранному типу операции."}
+            )
+        if self.amount < 0:
+            raise ValidationError({"amount": "Сумма не может быть отрицательной"})
+
+        if self.created_at < timezone.now().date():
+            raise ValidationError({"date": "Дата не может быть больше текущей."})
 
     class Meta:
         verbose_name = "Движение денежных средств"
