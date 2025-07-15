@@ -1,5 +1,5 @@
-from django.db import models
 from django.core.exceptions import ValidationError
+from django.db import models
 from django.utils import timezone
 
 
@@ -38,7 +38,7 @@ class Category(models.Model):
     )
 
     def __str__(self):
-        return f"{self.type} | {self.name}"
+        return self.name
 
     class Meta:
         verbose_name = "Категория"
@@ -54,7 +54,7 @@ class SubCategory(models.Model):
     )
 
     def __str__(self):
-        return f"{self.category}/{self.name}"
+        return self.name
 
     class Meta:
         verbose_name = "Подкатегория"
