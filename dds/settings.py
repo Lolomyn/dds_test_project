@@ -1,8 +1,7 @@
-from pathlib import Path
-from dotenv import load_dotenv
 import os
+from pathlib import Path
 
-import users.models
+from dotenv import load_dotenv
 
 load_dotenv(override=True)
 
@@ -96,7 +95,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'users.User'
+# AUTH_USER_MODEL = 'users.User'
 
 # LOGIN_REDIRECT_URL =
 # LOGOUT_REDIRECT_URL =
