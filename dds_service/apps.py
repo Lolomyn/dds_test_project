@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class UsersConfig(AppConfig):
+class DdsServiceConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
-    name = "users"
+    name = "dds_service"
