@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Status, Type, Category, SubCategory, Transaction
+
+from .models import Category, Status, SubCategory, Transaction, Type
 
 
 @admin.register(Status)
