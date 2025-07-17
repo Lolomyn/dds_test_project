@@ -95,7 +95,7 @@ class TypeDetailView(APIView):
         return Response({"serializer": serializer, "obj": queryset})
 
     def post(self, request, pk):
-        queryset = get_object_or_404(Status, pk=pk)
+        queryset = get_object_or_404(Type, pk=pk)
         serializer = TypeSerializer(queryset, data=request.data)
         if not serializer.is_valid():
             return Response({"serializer": serializer, "obj": queryset})
@@ -152,12 +152,12 @@ class CategoryDetailView(APIView):
     template_name = "category_detail.html"
 
     def get(self, request, pk):
-        queryset = get_object_or_404(Type, pk=pk)
+        queryset = get_object_or_404(Category, pk=pk)
         serializer = CategorySerializer(queryset)
         return Response({"serializer": serializer, "obj": queryset})
 
     def post(self, request, pk):
-        queryset = get_object_or_404(Status, pk=pk)
+        queryset = get_object_or_404(Category, pk=pk)
         serializer = CategorySerializer(queryset, data=request.data)
         if not serializer.is_valid():
             return Response({"serializer": serializer, "obj": queryset})
@@ -214,12 +214,12 @@ class SubCategoryDetailView(APIView):
     template_name = "subcategory_detail.html"
 
     def get(self, request, pk):
-        queryset = get_object_or_404(Type, pk=pk)
+        queryset = get_object_or_404(SubCategory, pk=pk)
         serializer = SubCategorySerializer(queryset)
         return Response({"serializer": serializer, "obj": queryset})
 
     def post(self, request, pk):
-        queryset = get_object_or_404(Status, pk=pk)
+        queryset = get_object_or_404(SubCategory, pk=pk)
         serializer = SubCategorySerializer(queryset, data=request.data)
         if not serializer.is_valid():
             return Response({"serializer": serializer, "obj": queryset})
@@ -279,12 +279,12 @@ class TransactionDetailView(APIView):
     template_name = "transaction_detail.html"
 
     def get(self, request, pk):
-        queryset = get_object_or_404(Type, pk=pk)
+        queryset = get_object_or_404(Transaction, pk=pk)
         serializer = TransactionSerializer(queryset)
         return Response({"serializer": serializer, "obj": queryset})
 
     def post(self, request, pk):
-        queryset = get_object_or_404(Status, pk=pk)
+        queryset = get_object_or_404(Transaction, pk=pk)
         serializer = TransactionSerializer(queryset, data=request.data)
         if not serializer.is_valid():
             return Response({"serializer": serializer, "obj": queryset})
@@ -315,12 +315,18 @@ class TransactionCreateAPIView(generics.ListCreateAPIView):
 
     def get(self, request, *args, **kwargs):
         serializer = self.get_serializer()
-        return Response({"serializer": serializer})
+        return Response(
+            {"serializer": serializer, "categories": Category.objects.all()}
+        )
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return redirect("/transaction/")
-        else:
-            return Response({"serializer": serializer})
+
+        if not serializer.is_valid():
+            return Response(
+                {"serializer": serializer, "categories": Category.objects.all()},
+                status=400,
+            )
+
+        serializer.save()
+        return redirect("/transaction/")

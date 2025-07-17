@@ -8,7 +8,7 @@ class StatusSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Status
-        fields = ["id", "name"]
+        fields = "__all__"
 
 
 class TypeSerializer(serializers.ModelSerializer):
@@ -16,7 +16,7 @@ class TypeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Type
-        fields = ["id", "name"]
+        fields = "__all__"
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -24,7 +24,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = ["id", "name", "type"]
+        fields = "__all__"
 
 
 class SubCategorySerializer(serializers.ModelSerializer):
@@ -32,7 +32,7 @@ class SubCategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SubCategory
-        fields = ["id", "name", "category"]
+        fields = "__all__"
 
 
 class TransactionSerializer(serializers.ModelSerializer):
@@ -40,13 +40,17 @@ class TransactionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Transaction
-        fields = [
-            "id",
-            "created_at",
-            "status",
-            "type",
-            "category",
-            "subcategory",
-            "amount",
-            "description",
-        ]
+        fields = "__all__"
+
+    def validate(self, data):
+        if data["subcategory"].category != data["category"]:
+            raise serializers.ValidationError(
+                "Данная подкатегория не связана с этой категорией!"
+            )
+
+        if data["category"].type != data["type"]:
+            raise serializers.ValidationError(
+                "Данная категория не связана с этим типом!"
+            )
+
+        return data

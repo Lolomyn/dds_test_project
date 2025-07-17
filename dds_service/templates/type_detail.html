@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load rest_framework %}
+{% block title %}Изменить тип{% endblock %}
+
+{% block content %}
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <p>{% render_form serializer %}</p>
+        <a href="{% url 'dds_service:type' %}">
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+        </a>
+        <a href="{% url 'dds_service:type' %}" class="btn btn-secondary">Отмена</a>
+    </form>
+
+{% endblock %}

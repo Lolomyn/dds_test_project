@@ -1,10 +1,16 @@
 {% extends 'base.html' %}
 {% load rest_framework %}
+{% block title %}Изменить статус{% endblock %}
+
 {% block content %}
-<form action="{% url 'dds_service:status-detail' pk=obj.pk %}" method="post">
-    {% csrf_token %}
-    {% render_form serializer %}
-    <input type="submit" class="btn btn-primary" value="Сохранить">
-    <a href="{% url 'dds_service:status' %}" class="btn btn-secondary">Отмена</a>
-</form>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <p>{% render_form serializer %}</p>
+        <a href="{% url 'dds_service:status' %}">
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+        </a>
+        <a href="{% url 'dds_service:status' %}" class="btn btn-secondary">Отмена</a>
+    </form>
+
 {% endblock %}

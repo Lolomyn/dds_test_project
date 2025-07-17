@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% load rest_framework %}
+{% block title %}Создать тип{% endblock %}
+
+{% block content %}
+    <form action="{% url 'dds_service:type-create' %}" method="post">
+        {% csrf_token %}
+        <p>{% render_form serializer %}</p>
+        <input type="submit" class="btn btn-primary" value="Сохранить">
+    </form>
+{% endblock %}

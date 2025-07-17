@@ -1,6 +1,5 @@
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.utils import timezone
 
 
 class Status(models.Model):
@@ -38,7 +37,7 @@ class Category(models.Model):
     )
 
     def __str__(self):
-        return self.name
+        return f"{self.name} ({self.type})"
 
     class Meta:
         verbose_name = "Категория"
@@ -54,7 +53,7 @@ class SubCategory(models.Model):
     )
 
     def __str__(self):
-        return self.name
+        return f"{self.name} ({self.category})"
 
     class Meta:
         verbose_name = "Подкатегория"
@@ -88,6 +87,12 @@ class Transaction(models.Model):
         return f"{self.status}/{self.created_at} - {self.amount} руб."
 
     def clean(self):
+        """
+        - Проверка связи подкатегории с категорией
+        - Проверка связи категории с типом
+        - Проверка, что сумма операции неотрицательная
+        """
+
         super().clean()
 
         if self.subcategory.category != self.category:
@@ -99,11 +104,9 @@ class Transaction(models.Model):
             raise ValidationError(
                 {"category": "Категория не соответствует выбранному типу операции."}
             )
+
         if self.amount < 0:
             raise ValidationError({"amount": "Сумма не может быть отрицательной"})
-
-        if self.created_at < timezone.now().date():
-            raise ValidationError({"date": "Дата не может быть больше текущей."})
 
     class Meta:
         verbose_name = "Движение денежных средств"

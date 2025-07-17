@@ -1,10 +1,9 @@
 {% extends 'base.html' %}
 {% load rest_framework %}
+{% block title %}Удалить статус{% endblock %}
+
 {% block content %}
-<div class="card">
-    <div class="card-header">
-        <h5>Подтверждение удаления</h5>
-    </div>
+
     <div class="card-body">
         <p>Вы уверены, что хотите удалить этот статус?</p>
         <form method="post">
@@ -13,5 +12,5 @@
             <a href="{% url 'dds_service:status' %}" class="btn btn-secondary">Отмена</a>
         </form>
     </div>
-</div>
+
 {% endblock %}
