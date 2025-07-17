@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load rest_framework %}
+{% block title %}Создать операцию{% endblock %}
+
+{% block content %}
+
+    <form action="{% url 'dds_service:transaction-create' %}" method="post">
+        {% csrf_token %}
+
+        {% if serializer and serializer.errors %}
+            <div style="color: red; margin-bottom: 15px;">
+                {% for field, errors in serializer.errors.items %}
+                    {% for error in errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <p>{% render_form serializer %}</p>
+        <input type="submit" class="btn btn-primary" value="Сохранить">
+    </form>
+
+{% endblock %}

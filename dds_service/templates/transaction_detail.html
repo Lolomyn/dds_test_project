@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load rest_framework %}
+{% block title %}Изменить операцию{% endblock %}
+
+{% block content %}
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {% if serializer and serializer.errors %}
+            <div style="color: red; margin-bottom: 15px;">
+                {% for field, errors in serializer.errors.items %}
+                    {% for error in errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <p>{% render_form serializer %}</p>
+        <a href="{% url 'dds_service:transaction' %}">
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+        </a>
+        <a href="{% url 'dds_service:transaction' %}" class="btn btn-secondary">Отмена</a>
+    </form>
+
+{% endblock %}
