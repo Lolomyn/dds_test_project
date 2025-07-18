@@ -19,7 +19,15 @@ by Савельев Максим
     git clone https://github.com/Lolomyn/dds_test_project.git
     cd dds_test_project
 
-Заполнить файл .env.sample, переименовать в .env
+Заполнить файл .env по шаблону
+
+    SECRET_KEY=секретный_ключ_джанго
+    DEBUG=True_False
+    POSTGRES_NAME=имя_базы_данных
+    POSTGRES_USER=имя_пользователя_postgres
+    POSTGRES_PASSWORD=пароль_пользователя_postgres
+    POSTGRES_HOST=хост_postgres
+    POSTGRES_PORT=порт_postgres
 
 Установить зависимости
 
@@ -36,5 +44,3 @@ by Савельев Максим
 Запустить проект
 
     python manage.py runserver
-
-[Главная страница сервиса](http://127.0.0.1:8000/transaction/)
