@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from .models import Category, Status, SubCategory, Transaction, Type
+from .services import TransactionService
 
 
 class StatusSerializer(serializers.ModelSerializer):
@@ -43,14 +44,7 @@ class TransactionSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def validate(self, data):
-        if data["subcategory"].category != data["category"]:
-            raise serializers.ValidationError(
-                "Данная подкатегория не связана с этой категорией!"
-            )
-
-        if data["category"].type != data["type"]:
-            raise serializers.ValidationError(
-                "Данная категория не связана с этим типом!"
-            )
+        TransactionService.validate_category(data)
+        TransactionService.validate_subcategory(data)
 
         return data
